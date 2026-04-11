@@ -1,0 +1,30 @@
+<!-- src/assets/icons/XLogoShape.svg (DEFINITIVE CROSSED SWORDS) -->
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- A more complex gradient for a realistic metallic look -->
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dddddd" />
+      <stop offset="20%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#cccccc" />
+      <stop offset="100%" stop-color="#bbbbbb" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(100, 100) scale(0.8)">
+    <!-- Sword 1 (rotated -45 degrees) -->
+    <g transform="rotate(-45)">
+      <path d="M-5,0 L-5,-80 L-2,-85 L2,-85 L5,-80 L5,0 L15,10 C20,15 20,25 15,30 L5,40 L-5,40 L-15,30 C-20,25 -20,15 -15,10 Z" fill="url(#metal)" stroke="#333333" stroke-width="0.5"/>
+      <path d="M-2, -85 L0,-110 L2,-85 Z" fill="url(#metal)" stroke="#333333" stroke-width="0.5"/>
+      <circle cx="0" cy="20" r="4" fill="#555555" />
+      <path d="M-3,40 L-3,55 L3,55 L3,40 Z" fill="#888888" stroke="#333333" stroke-width="0.5"/>
+      <path d="M-4,55 L-6,65 L6,65 L4,55 Z" fill="#777777" stroke="#333333" stroke-width="0.5"/>
+    </g>
+    <!-- Sword 2 (rotated 45 degrees) -->
+    <g transform="rotate(45)">
+      <path d="M-5,0 L-5,-80 L-2,-85 L2,-85 L5,-80 L5,0 L15,10 C20,15 20,25 15,30 L5,40 L-5,40 L-15,30 C-20,25 -20,15 -15,10 Z" fill="url(#metal)" stroke="#333333" stroke-width="0.5"/>
+      <path d="M-2, -85 L0,-110 L2,-85 Z" fill="url(#metal)" stroke="#333333" stroke-width="0.5"/>
+      <circle cx="0" cy="20" r="4" fill="#555555" />
+      <path d="M-3,40 L-3,55 L3,55 L3,40 Z" fill="#888888" stroke="#333333" stroke-width="0.5"/>
+      <path d="M-4,55 L-6,65 L6,65 L4,55 Z" fill="#777777" stroke="#333333" stroke-width="0.5"/>
+    </g>
+  </g>
+</svg>
