@@ -14,7 +14,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 
 const LoginPage = () => {
     // All of your state and handlers are correct and complete.
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const { login } = useAuth();
@@ -24,13 +24,13 @@ const LoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         setError(null);
-        axios.post('/api/auth/login/', { username, password })
+        axios.post('/api/auth/login/', { email, password })
             .then(response => {
                 login(response.data.key);
                 navigate('/admin/dashboard');
             })
             .catch(err => {
-                const errorMessage = err.response?.data?.non_field_errors?.[0] || "Login failed. Check username and password.";
+                const errorMessage = err.response?.data?.non_field_errors?.[0] || "Login failed. Check email and password.";
                 setError(errorMessage);
             });
     };
@@ -89,8 +89,8 @@ const LoginPage = () => {
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
                         <TextField
-                            margin="normal" required fullWidth id="username" label="Username" name="username"
-                            autoFocus value={username} onChange={(e) => setUsername(e.target.value)}
+                            margin="normal" required fullWidth id="email" label="Email" name="email"
+                            autoFocus value={email} onChange={(e) => setEmail(e.target.value)}
                             sx={textFieldStyles}
                         />
                         <TextField
