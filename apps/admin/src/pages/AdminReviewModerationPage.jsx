@@ -15,6 +15,7 @@ import {
     Chip,
     Rating
 } from '@mui/material';
+import API from '../utils/axiosConfig';
 
 const AdminReviewModerationPage = () => {
     const [reviews, setReviews] = useState([]);
@@ -22,7 +23,7 @@ const AdminReviewModerationPage = () => {
 
     const fetchReviews = () => {
         setLoading(true);
-        axios.get('/api/admin/reviews/')
+        API.get('/api/admin/reviews/')
             .then(response => {
                 setReviews(response.data.results || response.data);
                 setLoading(false);
@@ -38,7 +39,7 @@ const AdminReviewModerationPage = () => {
     }, []);
 
     const handleApprove = (reviewId) => {
-        axios.patch(`/api/admin/reviews/${reviewId}/`, { is_approved: true })
+        API.patch(`/api/admin/reviews/${reviewId}/`, { is_approved: true })
             .then(() => {
                 alert('Review approved!');
                 fetchReviews();
@@ -48,7 +49,7 @@ const AdminReviewModerationPage = () => {
 
     const handleDelete = (reviewId) => {
         if (window.confirm('Are you sure you want to delete this review?')) {
-            axios.delete(`/api/admin/reviews/${reviewId}/`)
+            API.delete(`/api/admin/reviews/${reviewId}/`)
                 .then(() => {
                     alert('Review deleted!');
                     fetchReviews();

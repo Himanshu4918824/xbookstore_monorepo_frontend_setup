@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CartContext } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth'; // 1. Import the auth hook
+import API from '../utils/axiosConfig';
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(null);
@@ -12,7 +13,7 @@ export const CartProvider = ({ children }) => {
         // Only try to fetch if we have a token
         if (authToken) {
             try {
-                const response = await axios.get('/api/cart/');
+                const response = await API.get('/api/cart/');
                 setCart(response.data);
             } catch (error) {
                 console.error("Failed to fetch cart", error);
@@ -36,7 +37,7 @@ export const CartProvider = ({ children }) => {
     // ... addToCart and other functions remain the same ...
     const addToCart = async (bookId, quantity = 1) => {
         try {
-            const response = await axios.post('/api/cart/add-item/', { book_id: bookId, quantity: quantity });
+            const response = await API.post('/api/cart/add-item/', { book_id: bookId, quantity: quantity });
             setCart(response.data);
             alert("Item added to cart!");
         } catch (error) {
@@ -48,7 +49,7 @@ export const CartProvider = ({ children }) => {
 
     const increaseQuantity = async (cartItemId) => {
         try {
-            const response = await axios.post('/api/cart/increase-quantity/', {
+            const response = await API.post('/api/cart/increase-quantity/', {
                 cart_item_id: cartItemId
             });
             setCart(response.data); // Update state with the new cart
@@ -59,7 +60,7 @@ export const CartProvider = ({ children }) => {
 
     const decreaseQuantity = async (cartItemId) => {
         try {
-            const response = await axios.post('/api/cart/decrease-quantity/', {
+            const response = await API.post('/api/cart/decrease-quantity/', {
                 cart_item_id: cartItemId
             });
             setCart(response.data); // Update state with the new cart
@@ -71,7 +72,7 @@ export const CartProvider = ({ children }) => {
     const removeFromCart = async (cartItemId) => {
         try {
             // Call our new backend endpoint
-            const response = await axios.post('/api/cart/remove-item/', {
+            const response = await API.post('/api/cart/remove-item/', {
                 cart_item_id: cartItemId
             });
             // Update the entire cart state with the response from the server

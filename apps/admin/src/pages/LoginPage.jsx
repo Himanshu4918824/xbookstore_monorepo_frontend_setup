@@ -11,6 +11,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import API from '../utils/axiosConfig';
 
 const LoginPage = () => {
     // All of your state and handlers are correct and complete.
@@ -24,7 +25,7 @@ const LoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         setError(null);
-        axios.post('/api/auth/login/', { email, password })
+        API.post('/api/auth/login/', { email, password })
             .then(response => {
                 login(response.data.key);
                 navigate('/admin/dashboard');

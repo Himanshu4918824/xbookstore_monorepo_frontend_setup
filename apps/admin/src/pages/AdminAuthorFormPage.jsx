@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Card, Label, TextInput, Textarea } from 'flowbite-react';
+import API from '../utils/axiosConfig';
 
 // Define the shape of a single history record
 const initialHistoryRecord = { designation: '', organization: '', bio: '', start_date: '', end_date: null };
@@ -19,7 +20,7 @@ const AdminAuthorFormPage = () => {
     // --- DATA FETCHING ---
     useEffect(() => {
         if (id) {
-            axios.get(`/api/admin/authors/${id}/`)
+            API.get(`/api/admin/authors/${id}/`)
                 .then(response => {
                     setAuthor(response.data);
                     // If the author has existing history records, populate the form with them
@@ -71,7 +72,7 @@ const AdminAuthorFormPage = () => {
         };
 
         // We use PATCH to update the author and their nested history
-        axios.patch(`/api/admin/authors/${id}/`, payload)
+        API.patch(`/api/admin/authors/${id}/`, payload)
             .then(() => {
                 alert('Author history updated successfully!');
                 navigate('/admin/authors');

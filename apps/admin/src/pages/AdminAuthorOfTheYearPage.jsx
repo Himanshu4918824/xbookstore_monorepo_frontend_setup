@@ -11,6 +11,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import API from '../utils/axiosConfig';
 
 const AdminAuthorOfTheYearPage = () => {
     const [currentAuthor, setCurrentAuthor] = useState(null);
@@ -21,7 +22,7 @@ const AdminAuthorOfTheYearPage = () => {
 
     const fetchAuthorOfTheYear = () => {
         setLoading(true);
-        axios.get('/api/admin/authors/?is_author_of_the_year=true')
+        API.get('/api/admin/authors/?is_author_of_the_year=true')
             .then(response => {
                 setCurrentAuthor(response.data.results?.[0] || null);
                 setLoading(false);
@@ -40,7 +41,7 @@ const AdminAuthorOfTheYearPage = () => {
         e.preventDefault();
         if (!searchTerm) return;
         setIsSearching(true);
-        axios.get(`/api/admin/authors/?search=${searchTerm}`)
+        API.get(`/api/admin/authors/?search=${searchTerm}`)
             .then(response => {
                 const newResults = response.data.results.filter(
                     result => result.id !== currentAuthor?.id
@@ -51,7 +52,7 @@ const AdminAuthorOfTheYearPage = () => {
     };
 
     const setAsAuthorOfTheYear = (author) => {
-        axios.patch(`/api/authors/${author.id}/toggle-aoty/`, { is_author_of_the_year: true })
+        API.patch(`/api/authors/${author.id}/toggle-aoty/`, { is_author_of_the_year: true })
             .then(() => {
                 alert(`"${author.user.first_name} ${author.user.last_name}" is now the new Author of the Year.`);
                 fetchAuthorOfTheYear();
@@ -62,7 +63,7 @@ const AdminAuthorOfTheYearPage = () => {
     };
 
     const removeAuthorOfTheYear = (author) => {
-        axios.patch(`/api/authors/${author.id}/toggle-aoty/`, { is_author_of_the_year: false })
+        API.patch(`/api/authors/${author.id}/toggle-aoty/`, { is_author_of_the_year: false })
             .then(() => {
                 alert(`"${author.user.first_name} ${author.user.last_name}" is no longer the Author of the Year.`);
                 setCurrentAuthor(null);

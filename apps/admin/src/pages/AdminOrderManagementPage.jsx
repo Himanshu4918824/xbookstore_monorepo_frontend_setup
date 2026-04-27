@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Button, Spinner, Badge } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import API from '../utils/axiosConfig';
 
 const AdminOrderManagementPage = () => {
     const [orders, setOrders] = useState([]);
@@ -10,7 +11,7 @@ const AdminOrderManagementPage = () => {
     const fetchOrders = () => {
         setLoading(true);
         // This endpoint will return all orders because we are logged in as an admin
-        axios.get('/api/orders/')
+        API.get('/api/orders/')
             .then(response => {
                 setOrders(response.data.results || response.data);
                 setLoading(false);

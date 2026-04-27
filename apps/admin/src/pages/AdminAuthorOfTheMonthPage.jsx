@@ -11,6 +11,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import API from '../utils/axiosConfig';
 
 const AdminAuthorOfTheMonthPage = () => {
     const [currentAuthor, setCurrentAuthor] = useState(null);
@@ -21,7 +22,7 @@ const AdminAuthorOfTheMonthPage = () => {
 
     const fetchAuthorOfTheMonth = () => {
         setLoading(true);
-        axios.get('/api/admin/authors/?is_author_of_the_month=true')
+        API.get('/api/admin/authors/?is_author_of_the_month=true')
             .then(response => {
                 setCurrentAuthor(response.data.results?.[0] || null);
                 setLoading(false);
@@ -40,7 +41,7 @@ const AdminAuthorOfTheMonthPage = () => {
         e.preventDefault();
         if (!searchTerm) return;
         setIsSearching(true);
-        axios.get(`/api/admin/authors/?search=${searchTerm}`)
+        API.get(`/api/admin/authors/?search=${searchTerm}`)
             .then(response => {
                 const newResults = response.data.results.filter(
                     result => result.id !== currentAuthor?.id
@@ -51,7 +52,7 @@ const AdminAuthorOfTheMonthPage = () => {
     };
 
     const setAsAuthorOfTheMonth = (author) => {
-        axios.patch(`/api/authors/${author.id}/toggle-aotm/`, { is_author_of_the_month: true })
+        API.patch(`/api/authors/${author.id}/toggle-aotm/`, { is_author_of_the_month: true })
             .then(() => {
                 alert(`"${author.user.first_name} ${author.user.last_name}" is now the new Author of the Month.`);
                 fetchAuthorOfTheMonth();
@@ -62,7 +63,7 @@ const AdminAuthorOfTheMonthPage = () => {
     };
 
     const removeAuthorOfTheMonth = (author) => {
-        axios.patch(`/api/authors/${author.id}/toggle-aotm/`, { is_author_of_the_month: false })
+        API.patch(`/api/authors/${author.id}/toggle-aotm/`, { is_author_of_the_month: false })
             .then(() => {
                 alert(`"${author.user.first_name} ${author.user.last_name}" is no longer the Author of the Month.`);
                 setCurrentAuthor(null);

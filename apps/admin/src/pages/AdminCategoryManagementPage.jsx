@@ -16,6 +16,7 @@ import {
 import CategoryColumn from '../components/CategoryColumn';
 import CategoryDialog from '../components/CategoryDialog';
 import { usePageEntranceAnimation } from '../components/animationHooks';
+import API from '../utils/axiosConfig';
 
 const AdminCategoryManagementPage = () => {
     // --- STATE MANAGEMENT ---
@@ -40,7 +41,7 @@ const AdminCategoryManagementPage = () => {
     // --- DATA FETCHING ---
     const fetchCategories = () => {
         setLoading(true);
-        axios.get('/api/categories/')
+        API.get('/api/categories/')
             .then(response => {
                 setAllCategories(response.data.results || response.data);
             })
@@ -74,7 +75,7 @@ const AdminCategoryManagementPage = () => {
 
     const handleDialogSave = async (payload) => {
         try {
-            await axios.post('/api/categories/', payload);
+            await API.post('/api/categories/', payload);
             setDialogOpen(false);
             // On successful save, deselect everything to show the new top-level item
             setSelectedCol1(null);

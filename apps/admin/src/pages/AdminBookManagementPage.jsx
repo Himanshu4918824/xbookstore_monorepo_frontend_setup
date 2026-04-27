@@ -45,6 +45,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import API from "../utils/axiosConfig";
 
 // ===================================================================
 //  1. Reusable Sub-Component for the Collapsible Row (Unchanged)
@@ -227,13 +228,13 @@ const AdminBookManagementPage = () => {
   }, [fetchBooks]);
 
   useEffect(() => {
-    axios.get("/api/books-meta/").then((res) => {
+    API.get("/api/books-meta/").then((res) => {
       setMetaData({
         publications: res.data.publications || [],
         // Fetch categories from its own endpoint if needed
       });
     });
-    axios.get("/api/categories/").then((res) => {
+    API.get("/api/categories/").then((res) => {
       setMetaData((prev) => ({
         ...prev,
         categories: res.data.results || res.data || [],

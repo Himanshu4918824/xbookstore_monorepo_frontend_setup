@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API from '../utils/axiosConfig'
 // 1. Import the context object from our hooks file
 import { AuthContext } from '../hooks/useAuth';
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = `Token ${authToken}`;
             localStorage.setItem('authToken', authToken);
 
-            axios.get('/api/auth/user/')
+            API.get('/api/auth/user/')
                 .then(response => {
                     setUser(response.data);
                     setIsLoading(false);

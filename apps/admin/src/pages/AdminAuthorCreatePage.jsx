@@ -17,6 +17,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // --- Custom Component Import ---
 import StyledTextField from '../components/StyledTextField';
+import API from '../utils/axiosConfig';
 
 // Helper function (Your original, working function)
 function getCroppedImg(image, crop, fileName) {
@@ -89,7 +90,7 @@ const AdminAuthorCreatePage = () => {
         const postData = new FormData();
         Object.keys(formData).forEach(key => postData.append(key, formData[key]));
         if (imageFile) { postData.append('image', imageFile); }
-        axios.post('/api/admin/authors/create_full/', postData)
+        API.post('/api/admin/authors/create_full/', postData)
             .then(() => {
                 alert('New author created successfully!');
                 navigate('/admin/authors');

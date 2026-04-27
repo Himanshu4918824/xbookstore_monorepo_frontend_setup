@@ -10,6 +10,7 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
+import API from '../utils/axiosConfig';
 
 // ===================================================================
 //  1. Reusable Sub-Component for an Editable Row
@@ -104,7 +105,7 @@ const AdminStockManagementPage = () => {
             page_size: pagination.rowsPerPage,
         });
 
-        axios.get(`/api/admin/stock/?${params.toString()}`)
+        API.get(`/api/admin/stock/?${params.toString()}`)
             .then(response => {
                 setFormats(response.data.results);
                 setPagination(prev => ({ ...prev, total: response.data.count }));
@@ -115,7 +116,7 @@ const AdminStockManagementPage = () => {
 
     useEffect(() => {
         fetchFormats();
-        axios.get('/api/admin/stock/stats/')
+        API.get('/api/admin/stock/stats/')
             .then(response => {
                 setTotalStockValue(response.data.total_stock_value);
             })
@@ -125,7 +126,7 @@ const AdminStockManagementPage = () => {
 
     const handleSaveStock = async (formatId, newStock) => {
         try {
-            await axios.patch(`/api/admin/stock/${formatId}/`, { stock: newStock });
+            await API.patch(`/api/admin/stock/${formatId}/`, { stock: newStock });
             // Refresh the list to show updated stock value and data
             fetchFormats();
         } catch (error) {

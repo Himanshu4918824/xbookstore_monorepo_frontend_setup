@@ -15,6 +15,7 @@ import {
     FormControlLabel,
     Switch
 } from '@mui/material';
+import API from '../utils/axiosConfig';
 
 const AdminCouponFormPage = () => {
     const { id } = useParams();
@@ -29,7 +30,7 @@ const AdminCouponFormPage = () => {
 
     useEffect(() => {
         if (isEditing) {
-            axios.get(`/api/admin/coupons/${id}/`)
+            API.get(`/api/admin/coupons/${id}/`)
                 .then(response => {
                     const data = response.data;
                     if (data.start_date) data.start_date = data.start_date.slice(0, 16);
@@ -57,8 +58,8 @@ const AdminCouponFormPage = () => {
         if (!payload.expiry_date) delete payload.expiry_date;
 
         const request = isEditing
-            ? axios.patch(`/api/admin/coupons/${id}/`, payload)
-            : axios.post('/api/admin/coupons/', payload);
+            ? API.patch(`/api/admin/coupons/${id}/`, payload)
+            : API.post('/api/admin/coupons/', payload);
 
         request
             .then(() => {

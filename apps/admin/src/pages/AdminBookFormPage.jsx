@@ -51,6 +51,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import StyledTextField from "../components/StyledTextField";
 import StyledReactSelect from "../components/StyledReactSelect"; // <-- IMPORT YOUR NEW COMPONENT
+import API from "../utils/axiosConfig";
 
 // --- NEW & CORRECTED Custom Component ---
 const CustomAuthorOption = (props) => {
@@ -225,8 +226,8 @@ const AdminBookFormPage = () => {
         // 1. Fetch Metadata first (authors, publications, categories)
         // This is essential because we need the list of all authors to populate our states later.
         const [metaRes, catRes] = await Promise.all([
-          axios.get("/api/books-meta/"),
-          axios.get("/api/categories/"),
+          API.get("/api/books-meta/"),
+          API.get("/api/categories/"),
         ]);
 
         // Prepare the master list of all authors with the 'value' and 'label' fields
@@ -246,7 +247,7 @@ const AdminBookFormPage = () => {
         // 2. If we are in "Edit Mode", now fetch the specific book's data.
         // We do this *after* fetching metadata to avoid race conditions.
         if (isEditing) {
-          const bookRes = await axios.get(`/api/books/${id}/`);
+          const bookRes = await API.get(`/api/books/${id}/`);
           const book = bookRes.data;
 
           // 3. Populate the state based on the new API response structure.
@@ -625,8 +626,8 @@ const AdminBookFormPage = () => {
 
     // 6. Define the API request (either PATCH for editing or POST for creating)
     const request = isEditing
-      ? axios.patch(`/api/books/${id}/`, postData)
-      : axios.post("/api/books/", postData);
+      ? API.patch(`/api/books/${id}/`, postData)
+      : API.post("/api/books/", postData);
 
     // 7. Execute the request and handle the response
     request

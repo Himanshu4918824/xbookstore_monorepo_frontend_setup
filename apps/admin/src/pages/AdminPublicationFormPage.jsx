@@ -18,6 +18,7 @@ import { animate } from "motion";
 import TwoColumnFormLayout from '../components/TwoColumnFormLayout';
 import StyledTextField from '../components/StyledTextField';
 import StyledDropdown from '../components/StyledDropdown';
+import API from '../utils/axiosConfig';
 
 // A default placeholder image for the uploader
 const placeholderImageUrl = 'https://images.unsplash.com/photo-1549492423-400259a5e5a4?q=80&w=1974&auto=format&fit=crop';
@@ -48,7 +49,7 @@ const AdminPublicationFormPage = () => {
 
     useEffect(() => {
         if (isEditing) {
-            axios.get(`/api/admin/publications/${id}/`)
+            API.get(`/api/admin/publications/${id}/`)
                 .then(response => {
                     setFormData(response.data);
                     setCurrentLogoUrl(response.data.logo);
@@ -97,8 +98,8 @@ const AdminPublicationFormPage = () => {
         }
 
         const request = isEditing
-            ? axios.patch(`/api/admin/publications/${id}/`, postData)
-            : axios.post('/api/admin/publications/', postData);
+            ? API.patch(`/api/admin/publications/${id}/`, postData)
+            : API.post('/api/admin/publications/', postData);
 
         request
             .then(() => {

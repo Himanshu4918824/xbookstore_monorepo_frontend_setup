@@ -15,6 +15,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import API from '../utils/axiosConfig';
 
 const AdminAuthorManagementPage = () => {
     const [authors, setAuthors] = useState([]);
@@ -45,7 +46,7 @@ const AdminAuthorManagementPage = () => {
 
     const fetchAuthors = () => {
         setLoading(true);
-        axios.get('/api/admin/authors/')
+        API.get('/api/admin/authors/')
             .then(response => {
                 const fetchedAuthors = response.data.results || response.data;
                 
@@ -89,7 +90,7 @@ const AdminAuthorManagementPage = () => {
     };
     const handleConfirmDelete = () => {
         if (!authorToDelete) return;
-        axios.delete(`/api/admin/authors/${authorToDelete}/`)
+        API.delete(`/api/admin/authors/${authorToDelete}/`)
             .then(() => {
                 alert('Author deleted successfully!');
                 fetchAuthors();

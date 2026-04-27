@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import API from '../utils/axiosConfig';
 
 const AdminCouponManagementPage = () => {
     const [coupons, setCoupons] = useState([]);
@@ -24,7 +25,7 @@ const AdminCouponManagementPage = () => {
 
     const fetchCoupons = () => {
         setLoading(true);
-        axios.get('/api/admin/coupons/')
+        API.get('/api/admin/coupons/')
             .then(response => {
                 setCoupons(response.data.results || response.data);
                 setLoading(false);
@@ -41,7 +42,7 @@ const AdminCouponManagementPage = () => {
 
     const handleDelete = (couponId) => {
         if (window.confirm('Are you sure you want to delete this coupon?')) {
-            axios.delete(`/api/admin/coupons/${couponId}/`)
+            API.delete(`/api/admin/coupons/${couponId}/`)
                 .then(() => {
                     alert('Coupon deleted successfully!');
                     fetchCoupons();
@@ -51,7 +52,7 @@ const AdminCouponManagementPage = () => {
     };
 
     const handleToggleActive = (coupon) => {
-        axios.patch(`/api/admin/coupons/${coupon.id}/`, { is_active: !coupon.is_active })
+        API.patch(`/api/admin/coupons/${coupon.id}/`, { is_active: !coupon.is_active })
             .then(() => {
                 fetchCoupons();
             })

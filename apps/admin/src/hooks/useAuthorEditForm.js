@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { centerCrop, makeAspectCrop } from 'react-image-crop';
+import API from '../utils/axiosConfig'
 
 // Helper function to get cropped image File (Unchanged)
 function getCroppedImg(image, crop, fileName) {
@@ -49,7 +50,7 @@ export const useAuthorEditForm = () => {
     useEffect(() => {
         if (id) {
             setIsLoading(true);
-            axios.get(`/api/admin/authors/${id}/`)
+            API.get(`/api/admin/authors/${id}/`)
                 .then(response => {
                     setUserData(response.data.user);
                     setAuthorData(response.data);
@@ -126,7 +127,7 @@ export const useAuthorEditForm = () => {
         if (imageFile) {
             postData.append('image', imageFile);
         }
-        axios.patch(`/api/admin/authors/${id}/`, postData)
+        API.patch(`/api/admin/authors/${id}/`, postData)
             .then(() => {
                 alert('Author updated successfully!');
                 navigate('/admin/authors');

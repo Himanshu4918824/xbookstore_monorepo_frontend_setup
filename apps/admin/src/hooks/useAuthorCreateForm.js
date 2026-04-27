@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { centerCrop, makeAspectCrop } from 'react-image-crop';
+import API from '../utils/axiosConfig';
 
 // This is your original, working helper function.
 function getCroppedImg(image, crop, fileName) {
@@ -85,7 +86,7 @@ export const useAuthorCreateForm = () => {
         const postData = new FormData();
         Object.keys(formData).forEach(key => postData.append(key, formData[key]));
         if (imageFile) { postData.append('image', imageFile); }
-        axios.post('/api/admin/authors/create_full/', postData)
+        API.post('/api/admin/authors/create_full/', postData)
             .then(() => {
                 alert('New author created successfully!');
                 navigate('/admin/authors');

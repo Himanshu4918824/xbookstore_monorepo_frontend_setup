@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import API from "../utils/axiosConfig";
 
 const AdminBookFormatsPage = () => {
   const { id } = useParams();
@@ -45,7 +46,7 @@ const AdminBookFormatsPage = () => {
 
   const fetchBookData = useCallback(() => {
     setIsLoading(true);
-    axios.get(`/api/books/${id}/`).then((res) => {
+    API.get(`/api/books/${id}/`).then((res) => {
       setBook(res.data);
       setFormats(res.data.formats);
       setIsLoading(false);
@@ -53,7 +54,7 @@ const AdminBookFormatsPage = () => {
   }, [id]);
 
   useEffect(() => {
-    axios.get("/api/books-meta/").then((res) => {
+    API.get("/api/books-meta/").then((res) => {
       const languages = res.data.languages || [];
       setMetaData({ 
         paperSizes: res.data.paper_sizes || [],
@@ -85,7 +86,7 @@ const AdminBookFormatsPage = () => {
     }
     setIsCalculating(true);
     try {
-      const response = await axios.post("/api/price/calculate/", {
+      const response = await API.post("/api/price/calculate/", {
         page_count: book.pages,
         paper_size_id: newFormatData.paper_size,
         binding_type: newFormatData.binding_type,

@@ -11,6 +11,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import API from '../utils/axiosConfig';
 
 const AdminBookOfTheMonthPage = () => {
     const [currentBook, setCurrentBook] = useState(null);
@@ -21,7 +22,7 @@ const AdminBookOfTheMonthPage = () => {
 
     const fetchBookOfTheMonth = () => {
         setLoading(true);
-        axios.get('/api/books/?is_book_of_the_month=true')
+        API.get('/api/books/?is_book_of_the_month=true')
             .then(response => {
                 setCurrentBook(response.data.results?.[0] || null);
                 setLoading(false);
@@ -40,7 +41,7 @@ const AdminBookOfTheMonthPage = () => {
         e.preventDefault();
         if (!searchTerm) return;
         setIsSearching(true);
-        axios.get(`/api/books/?search=${searchTerm}`)
+        API.get(`/api/books/?search=${searchTerm}`)
             .then(response => {
                 const newResults = response.data.results.filter(
                     result => result.id !== currentBook?.id
@@ -51,7 +52,7 @@ const AdminBookOfTheMonthPage = () => {
     };
 
     const setAsBookOfTheMonth = (book) => {
-        axios.patch(`/api/books/${book.id}/toggle-botm/`, { is_book_of_the_month: true })
+        API.patch(`/api/books/${book.id}/toggle-botm/`, { is_book_of_the_month: true })
             .then(() => {
                 alert(`"${book.title}" is now the new Book of the Month.`);
                 fetchBookOfTheMonth();
@@ -61,7 +62,7 @@ const AdminBookOfTheMonthPage = () => {
     };
 
     const removeBookOfTheMonth = (book) => {
-        axios.patch(`/api/books/${book.id}/toggle-botm/`, { is_book_of_the_month: false })
+        API.patch(`/api/books/${book.id}/toggle-botm/`, { is_book_of_the_month: false })
             .then(() => {
                 alert(`"${book.title}" is no longer the Book of the Month.`);
                 setCurrentBook(null); // Optimistic update

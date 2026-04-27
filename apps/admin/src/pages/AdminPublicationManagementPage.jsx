@@ -21,6 +21,7 @@ import {
     usePageEntranceAnimation,
     useStaggeredListAnimation
 } from '../components/animationHooks';
+import API from '../utils/axiosConfig';
 
 const AdminPublicationManagementPage = () => {
     // --- State for data and dialog (Unchanged) ---
@@ -45,7 +46,7 @@ const AdminPublicationManagementPage = () => {
 
     const fetchPublications = () => {
         setLoading(true);
-        axios.get('/api/admin/publications/')
+        API.get('/api/admin/publications/')
             .then(response => {
                 setPublications(response.data.results || response.data);
             })
@@ -65,7 +66,7 @@ const AdminPublicationManagementPage = () => {
 
     const handleConfirmDelete = () => {
         if (!publicationToDelete) return;
-        axios.delete(`/api/admin/publications/${publicationToDelete}/`)
+        API.delete(`/api/admin/publications/${publicationToDelete}/`)
             .then(() => fetchPublications())
             .catch(error => console.error("Error deleting publication:", error))
             .finally(() => handleCloseDialog());

@@ -11,6 +11,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import API from '../utils/axiosConfig';
 
 const AdminBookOfTheYearPage = () => {
     const [currentBook, setCurrentBook] = useState(null);
@@ -21,7 +22,7 @@ const AdminBookOfTheYearPage = () => {
 
     const fetchBookOfTheYear = () => {
         setLoading(true);
-        axios.get('/api/books/?is_book_of_the_year=true')
+        API.get('/api/books/?is_book_of_the_year=true')
             .then(response => {
                 setCurrentBook(response.data.results?.[0] || null);
                 setLoading(false);
@@ -40,7 +41,7 @@ const AdminBookOfTheYearPage = () => {
         e.preventDefault();
         if (!searchTerm) return;
         setIsSearching(true);
-        axios.get(`/api/books/?search=${searchTerm}`)
+        API.get(`/api/books/?search=${searchTerm}`)
             .then(response => {
                 const newResults = response.data.results.filter(
                     result => result.id !== currentBook?.id
@@ -51,7 +52,7 @@ const AdminBookOfTheYearPage = () => {
     };
 
     const setAsBookOfTheYear = (book) => {
-        axios.patch(`/api/books/${book.id}/toggle-boty/`, { is_book_of_the_year: true })
+        API.patch(`/api/books/${book.id}/toggle-boty/`, { is_book_of_the_year: true })
             .then(() => {
                 alert(`"${book.title}" is now the new Book of the Year.`);
                 fetchBookOfTheYear();
@@ -62,7 +63,7 @@ const AdminBookOfTheYearPage = () => {
     };
 
     const removeBookOfTheYear = (book) => {
-        axios.patch(`/api/books/${book.id}/toggle-boty/`, { is_book_of_the_year: false })
+        API.patch(`/api/books/${book.id}/toggle-boty/`, { is_book_of_the_year: false })
             .then(() => {
                 alert(`"${book.title}" is no longer the Book of the Year.`);
                 setCurrentBook(null);

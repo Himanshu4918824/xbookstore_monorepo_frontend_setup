@@ -11,6 +11,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import API from '../utils/axiosConfig';
 
 const AdminFeaturedBooksPage = () => {
     const [featuredBooks, setFeaturedBooks] = useState([]);
@@ -21,7 +22,7 @@ const AdminFeaturedBooksPage = () => {
 
     const fetchFeaturedBooks = () => {
         setLoading(true);
-        axios.get('/api/books/?is_featured=true')
+        API.get('/api/books/?is_featured=true')
             .then(response => {
                 setFeaturedBooks(response.data.results || response.data);
                 setLoading(false);
@@ -37,7 +38,7 @@ const AdminFeaturedBooksPage = () => {
         e.preventDefault();
         if (!searchTerm) return;
         setIsSearching(true);
-        axios.get(`/api/books/?search=${searchTerm}`)
+        API.get(`/api/books/?search=${searchTerm}`)
             .then(response => {
                 const newResults = response.data.results.filter(
                     result => !featuredBooks.some(featured => featured.id === result.id)
@@ -48,7 +49,7 @@ const AdminFeaturedBooksPage = () => {
     };
 
     const toggleFeaturedStatus = (book, isFeatured) => {
-        axios.patch(`/api/books/${book.id}/toggle-feature/`, { is_featured: isFeatured })
+        API.patch(`/api/books/${book.id}/toggle-feature/`, { is_featured: isFeatured })
             .then(() => {
                 alert(`Book "${book.title}" has been ${isFeatured ? 'featured' : 'un-featured'}.`);
                 if (isFeatured) {

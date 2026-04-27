@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API from '../utils/axiosConfig';
 
 // Define the shape of a single history record
 const initialHistoryRecord = { designation: '', organization: '', bio: '', start_date: '', end_date: null };
@@ -21,7 +22,7 @@ export const useAuthorHistoryForm = () => {
         if (id) {
             setIsLoading(true);
             setError(null);
-            axios.get(`/api/admin/authors/${id}/`)
+            API.get(`/api/admin/authors/${id}/`)
                 .then(response => {
                     setAuthor(response.data);
                     if (response.data.history && response.data.history.length > 0) {
@@ -73,7 +74,7 @@ export const useAuthorHistoryForm = () => {
         setError(null);
         const payload = { history };
 
-        axios.patch(`/api/admin/authors/${id}/`, payload)
+        API.patch(`/api/admin/authors/${id}/`, payload)
             .then(() => {
                 alert('Author history updated successfully!');
                 navigate('/admin/authors');
