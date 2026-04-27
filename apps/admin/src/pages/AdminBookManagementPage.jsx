@@ -213,7 +213,7 @@ const AdminBookManagementPage = () => {
       }
     });
 
-    axios
+    API
       .get(`/api/books/?${params.toString()}`)
       .then((response) => {
         setBooks(response.data.results);
@@ -244,7 +244,7 @@ const AdminBookManagementPage = () => {
 
   const handleDelete = (bookId) => {
     if (window.confirm("Are you sure?")) {
-      axios
+      API
         .delete(`/api/books/${bookId}/`)
         .then(() => {
           alert("Book deleted!");
