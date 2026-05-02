@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, Link as RouterLink } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import {
   Button,
   Paper,
@@ -47,6 +47,7 @@ const AdminBookFormatsPage = () => {
   const fetchBookData = useCallback(() => {
     setIsLoading(true);
     API.get(`/api/books/${id}/`).then((res) => {
+      console.log(res)
       setBook(res.data);
       setFormats(res.data.formats);
       setIsLoading(false);
@@ -108,7 +109,7 @@ const AdminBookFormatsPage = () => {
     setIsSubmitting(true);
     const payload = { ...newFormatData, mrp: calculatedMrp, book: id };
 
-    axios
+    API
       .post(`/api/admin/book-formats/`, payload)
       .then(() => {
         alert("New format saved successfully!");
@@ -134,7 +135,7 @@ const AdminBookFormatsPage = () => {
 
   const handleDeleteFormat = (formatId) => {
     if (window.confirm("Are you sure you want to delete this format?")) {
-      axios
+      API
         .delete(`/api/admin/book-formats/${formatId}/`)
         .then(() => {
           alert("Format deleted.");

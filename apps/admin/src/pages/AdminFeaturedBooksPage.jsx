@@ -49,18 +49,23 @@ const AdminFeaturedBooksPage = () => {
     };
 
     const toggleFeaturedStatus = (book, isFeatured) => {
-        API.patch(`/api/books/${book.id}/toggle-feature/`, { is_featured: isFeatured })
-            .then(() => {
-                alert(`Book "${book.title}" has been ${isFeatured ? 'featured' : 'un-featured'}.`);
-                if (isFeatured) {
-                    setFeaturedBooks(prev => [book, ...prev]);
-                    setSearchResults(prev => prev.filter(b => b.id !== book.id));
-                } else {
-                    setFeaturedBooks(prev => prev.filter(b => b.id !== book.id));
-                    setSearchResults(prev => [book, ...prev]);
-                }
-            })
-            .catch(() => alert('Failed to update book status.'));
+        try {
+            API.patch(`/api/books/${book.id}/toggle-feature/`, { is_featured: isFeatured })
+                .then((res) => {
+                    alert(`Book "${book.title}" has been ${isFeatured ? 'featured' : 'un-featured'}.`);
+                    if (isFeatured) {
+                        setFeaturedBooks(prev => [book, ...prev]);
+                        setSearchResults(prev => prev.filter(b => b.id !== book.id));
+                    } else {
+                        setFeaturedBooks(prev => prev.filter(b => b.id !== book.id));
+                        setSearchResults(prev => [book, ...prev]);
+                    }
+                })
+                .catch(() => alert('Failed to update book status.'));
+        } catch (error) {
+            console.log(error)
+        }
+
     };
 
     return (
@@ -99,11 +104,11 @@ const AdminFeaturedBooksPage = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         InputProps={{
-                            startAdornment: ( <InputAdornment position="start"><SearchIcon /></InputAdornment> ),
+                            startAdornment: (<InputAdornment position="start"><SearchIcon /></InputAdornment>),
                         }}
                     />
                     <Button type="submit" variant="contained" disabled={isSearching} sx={{ minWidth: 100 }}>
-                        {isSearching ? <CircularProgress size={24} color="inherit"/> : 'Search'}
+                        {isSearching ? <CircularProgress size={24} color="inherit" /> : 'Search'}
                     </Button>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2, maxHeight: 400, overflowY: 'auto' }}>

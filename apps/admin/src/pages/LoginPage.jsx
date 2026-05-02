@@ -27,6 +27,7 @@ const LoginPage = () => {
         setError(null);
         API.post('/api/auth/login/', { email, password })
             .then(response => {
+                // console.log(response)
                 login(response.data.key);
                 navigate('/admin/dashboard');
             })

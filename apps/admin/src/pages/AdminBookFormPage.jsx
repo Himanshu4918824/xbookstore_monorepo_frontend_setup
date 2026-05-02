@@ -632,6 +632,7 @@ const AdminBookFormPage = () => {
     // 7. Execute the request and handle the response
     request
       .then((response) => {
+        // console.log(response)
         alert(`Book ${isEditing ? "updated" : "created"} successfully!`);
 
         // Navigate to the next step (managing formats)
