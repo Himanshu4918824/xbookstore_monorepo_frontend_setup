@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import BookFilter from '../components/book/BookFilter';
 import BookDisplay from '../components/book/BookDisplay'; // We will still use this for clean code
 import { useContext } from 'react';
+import { Pagination } from '@mui/material';
 // import the actual context object or hook, not the provider component
 import { ApiContext } from '../context/ApiProvider';
 import { useEffect } from 'react';
@@ -24,15 +25,16 @@ const mockPaperQualities = ['70GSM', '80GSM Matte', '120GSM Glossy'];
 function StorePage() {
   // ---import functions from context and api service (no changes here)---
 
-  const { books, fetchAllBooks } = useContext(ApiContext);
+  const { books, fetchAllBooks , BooksCount} = useContext(ApiContext);
   // const { fetchAllBooks } = useApi(); // if you prefer the hook
 
   // fetchAllBooks returns a promise – log when it resolves
   useEffect(() => {
-    fetchAllBooks()
+    fetchAllBooks(page);
   }, []);
   // console.log(books)
-
+  const [page, setPage] = useState(1);
+  const booksPerPage = 20;
   // --- STATE MANAGEMENT (no changes here) ---
   const [layout, setLayout] = useState('grid');
   const [priceRange, setPriceRange] = useState([0, 2000]);
@@ -57,6 +59,24 @@ function StorePage() {
   }, [dataBooks, priceRange, selectedPublishers, rating, searchTerm]);
 
 
+  
+
+  const totalPages = Math.ceil(BooksCount / booksPerPage);
+  const handlePageChange = async (event, value) => {
+    setPage(value);
+
+    await fetchAllBooks(value);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, priceRange, selectedPublishers, rating]);
+
   // --- END STATE MANAGEMENT ---
   return (
     <Container maxWidth="xl" sx={{ mt: 4 }}>
@@ -75,11 +95,11 @@ function StorePage() {
           {/* Header section (Breadcrumbs, Search, Toggles) */}
           <Box sx={{ mb: 2 }}>
             <Breadcrumbs aria-label="breadcrumb">
-              <MuiLink component={Link} sx={{ color:"#D8CFC2"}} to="/" color="inherit">Home</MuiLink>
+              <MuiLink component={Link} sx={{ color: "#D8CFC2" }} to="/" color="inherit">Home</MuiLink>
               <Typography color="white">Books</Typography>
             </Breadcrumbs>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, mt: 2}}>
-              
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, mt: 2 }}>
+
 
 
               <TextField
@@ -214,12 +234,38 @@ function StorePage() {
               </ToggleButtonGroup>
             </Box>
             <Typography component="p" color="#D8CFC2" sx={{ mt: 1 }}>
-              Showing {filteredBooks.length} products
+              Showing {BooksCount} products
             </Typography>
           </Box>
-
           {/* We render our isolated BookDisplay component here */}
           <BookDisplay books={filteredBooks} layout={layout} />
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              mt: 5,
+            }}
+          >
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  color: '#D8CFC2',
+                  borderColor: 'rgba(255,255,255,0.2)',
+                },
+
+                '& .Mui-selected': {
+                  backgroundColor: '#D4B768 !important',
+                  color: '#000',
+                },
+              }}
+            />
+          </Box>
+        
         </Box>
       </Box>
     </Container>

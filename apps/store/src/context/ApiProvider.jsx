@@ -26,27 +26,31 @@ export function ApiProvider({ children }) {
     const [bookData, setBookData] = useState()
     const [Authors, setAuthors] = useState([]);
     const [AuthorsCount, setAuthorsCount] = useState(0);
+    const [BooksCount, setBooksCount] = useState(0);
     const [publication , setPublication] = useState([]);
 
 
-    const fetchAllBooks = async () => {
+    const fetchAllBooks = async (page = 1) => {
         try {
-            const response = await fetchBooks();
+            const response = await fetchBooks(page);
             // setBooks(response.data.results);
             const books = response?.data?.results?.map((book) => ({
                 id: book.id,
                 title: book.title,
                 category: 'Mystry',
-                author: book.participants[0].author.user.username,
+                // author: book.participants[0].author.user.username,
+                author: "no one",
                 rating: 4.5,
                 reviews: 120,
-                price: book.formats[0].mrp,
+                // price: book.formats[0].mrp ,
+                price: 1000,
                 publisher: book.publication.name,
                 description: book.description,
                 imageUrl: book.cover_image,
             }));
             setBooks(books);
-            // console.log(response.data.results)
+            setBooksCount(response.data.count);
+            // console.log(response.data)
             // return response.results
         } catch (error) {
             console.error(error)
@@ -169,6 +173,7 @@ export function ApiProvider({ children }) {
 
     const value = {
         books,
+        BooksCount,
         bookData,
         fetchAllBooks,
         fetchBookbyID,

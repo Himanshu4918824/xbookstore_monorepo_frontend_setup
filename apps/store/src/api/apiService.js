@@ -2,8 +2,8 @@ import api from './axiosConfig';
 
 
 // this function fetches the list of books from the backend
-const fetchBooks = () => {
-    return api.get('/api/books');
+const fetchBooks = (page = 1) => {
+    return api.get(`/api/books?page=${page}`);
 }
 
 // this function fetches the details of a book from the backend using the book id
