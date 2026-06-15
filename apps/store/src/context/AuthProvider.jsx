@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('/auth/user/');
+      const response = await api.get('/api/auth/user/');
       setUser(response.data);
     } catch (error) {
       console.error("Failed to fetch user. Token might be invalid.", error);

@@ -28,7 +28,7 @@ const AdminBookFormatsPage = () => {
   const [book, setBook] = useState(null);
   const [formats, setFormats] = useState([]);
   const [metaData, setMetaData] = useState({ paperSizes: [], languages: [] });
-  
+
   const [newFormatData, setNewFormatData] = useState({
     paper_size: "",
     binding_type: "Paperback",
@@ -47,18 +47,23 @@ const AdminBookFormatsPage = () => {
   const fetchBookData = useCallback(() => {
     setIsLoading(true);
     API.get(`/api/books/${id}/`).then((res) => {
-      console.log(res)
+      // console.log(res)
       setBook(res.data);
       setFormats(res.data.formats);
       setIsLoading(false);
     });
   }, [id]);
+  useEffect(() => {
+    fetchBookData();
+  }, [fetchBookData]);
 
   useEffect(() => {
-    API.get("/api/books-meta/").then((res) => {
+    if(!book?.pages) return;
+    API.get(`/api/books-meta/?pages=${book?.pages}&type=${newFormatData.binding_type}`).then((res) => {
+      console.log({ res })
       const languages = res.data.languages || [];
-      setMetaData({ 
-        paperSizes: res.data.paper_sizes || [],
+      setMetaData({
+        paperSizes: res.data.paper_sizes,
         languages: languages
       });
 
@@ -74,8 +79,8 @@ const AdminBookFormatsPage = () => {
         }
       }
     });
-    fetchBookData();
-  }, [fetchBookData]);
+    
+  }, [book]);
 
   const handleChange = (e) =>
     setNewFormatData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -159,7 +164,7 @@ const AdminBookFormatsPage = () => {
       </Button>
 
       <Typography variant="h4" gutterBottom>Manage Formats for "{book.title}"</Typography>
-      
+
       <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Existing Formats</Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {formats.map((format) => (
@@ -184,7 +189,7 @@ const AdminBookFormatsPage = () => {
             <FormControl fullWidth required>
               <InputLabel>Paper Size & Quality</InputLabel>
               <MuiSelect name="paper_size" value={newFormatData.paper_size} label="Paper Size & Quality" onChange={handleChange}>
-                {metaData.paperSizes.map((s) => (<MenuItem key={s.id} value={s.id}>{s.display_name}</MenuItem>))}
+                {metaData.paperSizes.map((s) => (<MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>))}
               </MuiSelect>
             </FormControl>
           </Grid>
@@ -197,7 +202,7 @@ const AdminBookFormatsPage = () => {
               </MuiSelect>
             </FormControl>
           </Grid>
-          
+
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth required>
               <InputLabel>Language</InputLabel>
@@ -216,11 +221,11 @@ const AdminBookFormatsPage = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={3}><TextField fullWidth label="Weight (g)" name="weight_grams" type="number" value={newFormatData.weight_grams} onChange={handleChange}/></Grid>
+          {/* <Grid item xs={12} sm={3}><TextField fullWidth label="Weight (g)" name="weight_grams" type="number" value={newFormatData.weight_grams} onChange={handleChange}/></Grid>
           <Grid item xs={12} sm={3}><TextField fullWidth label="Length (mm)" name="length_mm" type="number" value={newFormatData.length_mm} onChange={handleChange}/></Grid>
-          <Grid item xs={12} sm={3}><TextField fullWidth label="Width (mm)" name="width_mm" type="number" value={newFormatData.width_mm} onChange={handleChange}/></Grid>
-          <Grid item xs={12} sm={3}><TextField fullWidth label="Initial Stock" name="stock" type="number" value={newFormatData.stock} onChange={handleChange}/></Grid>
-          
+          <Grid item xs={12} sm={3}><TextField fullWidth label="Width (mm)" name="width_mm" type="number" value={newFormatData.width_mm} onChange={handleChange}/></Grid> */}
+          <Grid item xs={12} sm={3}><TextField fullWidth label="Initial Stock" name="stock" type="number" value={newFormatData.stock} onChange={handleChange} /></Grid>
+
           <Grid item xs={12}>
             <Button variant="outlined" onClick={handleCalculateMrp} disabled={isCalculating}>
               {isCalculating ? <CircularProgress size={24} /> : "Calculate MRP"}
