@@ -19,6 +19,7 @@ function OrderHistoryPage() {
    const { user, order } = useAuth();
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+   const orders = Array.isArray(order) ? order : order?.results || [];
 
    return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
@@ -40,8 +41,8 @@ function OrderHistoryPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {order && order.length > 0 ? (
-                order.map((item) => (
+              {orders && orders.length > 0 ? (
+                orders.map((item) => (
                   <TableRow key={item.id} hover>
                     <TableCell sx={{ fontWeight: 'medium' }}>
                       <MuiLink component={Link} to={`/dashboard/orders/${item.id}`} underline="hover">

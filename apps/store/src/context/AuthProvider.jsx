@@ -39,16 +39,18 @@ export function AuthProvider({ children })
 
 
 
-  // --- FETCH USER ORDERS ---
-  const fetchOrder = useCallback(async () => {
-    try {
-      // NOTE: Update '/api/orders/' to match your actual Django URL route
-      const response = await api.get('/api/orders/'); 
-      setOrder(response.data);
-    } catch (error) {
-      console.error("Failed to fetch Orders.", error);
-    }
-  }, []);
+ // --- FETCH USER ORDERS ---
+const fetchOrder = useCallback(async () => {
+  try {
+    const response = await api.get('/api/orders/');
+    const data = response.data.results || response.data;
+    setOrder(data); // This updates the global context state!
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch Orders.", error);
+    return null;
+  }
+}, []);
 
 
 
@@ -104,13 +106,14 @@ export function AuthProvider({ children })
 
     return {
       user: processedUser,
-      order,       // <-- CRITICAL FIX: Exposed order state to context users
+      order,
+      fetchOrder,
       login,
       logout,
       isAuthenticated: !!user,
       loading
     };
-  }, [user, order, login, logout]); // Added order to tracking triggers
+  }, [user, order, fetchOrder, login, logout]); // Added order to tracking triggers
   
   
 
@@ -119,7 +122,7 @@ export function AuthProvider({ children })
   if (loading) {
     return null; // Or insert a global loading spinner here
   }
-  
+
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
