@@ -96,44 +96,21 @@ function RegisterPage() {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                name="firstName"
-                label="First Name"
-                required
-                fullWidth
-                autoFocus
+              <TextField name="firstName" label="First Name" required fullWidth  autoFocus
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField name="lastName" label="Last Name" required fullWidth />
             </Grid>
             <Grid size={12}>
-              <TextField
-                type="email"
-                name="email"
-                label="Email Address"
-                required
-                fullWidth
-              />
+              <TextField type="email" name="email" label="Email Address" required fullWidth/>
             </Grid>
             {/* The name attributes of these fields are 'password' and 'password2' */}
             <Grid size={12}>
-              <TextField
-                type="password"
-                name="password"
-                label="Password"
-                required
-                fullWidth
-              />
+              <TextField type="password" name="password" label="Password" required fullWidth/>
             </Grid>
             <Grid size={12}>
-              <TextField
-                type="password"
-                name="password2"
-                label="Confirm Password"
-                required
-                fullWidth
-              />
+              <TextField type="password" name="password2" label="Confirm Password" required fullWidth/>
             </Grid>
           </Grid>
           <Button
