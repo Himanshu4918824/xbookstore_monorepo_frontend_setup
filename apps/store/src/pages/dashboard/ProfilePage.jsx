@@ -16,7 +16,7 @@ function ProfilePage()
   const [stateRegion, setStateRegion] = useState('');
   const [city, setCity] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [about, setAbout] = useState('');
+  const [about, setAbout] = useState('A passionate individual focused on exploring new opportunities, building meaningful connections.');
 
   useEffect(() => {
     if (user) {

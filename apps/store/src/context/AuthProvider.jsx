@@ -112,7 +112,7 @@ export function AuthProvider({ children })
     };
   }, [user, order, login, logout]); // Added order to tracking triggers
   
-
+  
 
   // --- GUARD CLAUSE ---
   // Moved beneath all standard hooks to follow React rules rules
