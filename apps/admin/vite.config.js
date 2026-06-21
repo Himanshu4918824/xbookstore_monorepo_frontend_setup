@@ -10,14 +10,14 @@ export default defineConfig({
     proxy: {
       // Proxy API requests to your Django backend
       '/api': {
-        // target: 'https://xbookstore.xoffencerpublication.in/',
-        target: 'http://127.0.0.1:8000/',
+        target: 'https://xbookstore.xoffencerpublication.in/',
+        // target: 'http://127.0.0.1:8000/',
         changeOrigin: true,
       },
       // Also proxy media file requests
       '/media': {
-        // target: 'https://xbookstore.xoffencerpublication.in/media',
-        target: 'http://127.0.0.1:8000/media',
+        target: 'https://xbookstore.xoffencerpublication.in/media',
+        // target: 'http://127.0.0.1:8000/media',
         changeOrigin: true,
       }
     }
