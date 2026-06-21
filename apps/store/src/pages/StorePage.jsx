@@ -25,7 +25,7 @@ const mockPaperQualities = ['70GSM', '80GSM Matte', '120GSM Glossy'];
 function StorePage() {
   // ---import functions from context and api service (no changes here)---
 
-  const { books, fetchAllBooks , BooksCount} = useContext(ApiContext);
+  const { books, fetchAllBooks, BooksCount } = useContext(ApiContext);
   // const { fetchAllBooks } = useApi(); // if you prefer the hook
 
   // fetchAllBooks returns a promise – log when it resolves
@@ -59,7 +59,7 @@ function StorePage() {
   }, [dataBooks, priceRange, selectedPublishers, rating, searchTerm]);
 
 
-  
+
 
   const totalPages = Math.ceil(BooksCount / booksPerPage);
   const handlePageChange = async (event, value) => {
@@ -265,7 +265,7 @@ function StorePage() {
               }}
             />
           </Box>
-        
+
         </Box>
       </Box>
     </Container>

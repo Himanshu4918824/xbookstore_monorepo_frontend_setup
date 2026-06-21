@@ -27,7 +27,7 @@ export function ApiProvider({ children }) {
     const [Authors, setAuthors] = useState([]);
     const [AuthorsCount, setAuthorsCount] = useState(0);
     const [BooksCount, setBooksCount] = useState(0);
-    const [publication , setPublication] = useState([]);
+    const [publication, setPublication] = useState([]);
 
 
     const fetchAllBooks = async (page = 1) => {
@@ -60,6 +60,7 @@ export function ApiProvider({ children }) {
     const fetchBookbyID = async (id) => {
         try {
             const response = await fetchBookDetail(id);
+            console.log({ response })
             setBookData(
                 {
                     id: response.data.id,
@@ -154,10 +155,10 @@ export function ApiProvider({ children }) {
     /*
      { id: 1, name: 'Starlight Press', logoUrl: 'https://via.placeholder.com/200x100/162735/FFFFFF?text=Starlight+Press' },
     */
-    
+
     const fetchAllPublication = async () => {
         try {
-            const response = await fetchPublications(); 
+            const response = await fetchPublications();
             const publication = response?.data?.results?.map((p) => ({
                 id: p.id,
                 name: p.name,
@@ -169,7 +170,7 @@ export function ApiProvider({ children }) {
             console.error(error)
         }
     }
-            
+
 
     const value = {
         books,
