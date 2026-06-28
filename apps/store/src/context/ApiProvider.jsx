@@ -30,6 +30,18 @@ export function ApiProvider({ children }) {
     const [publication, setPublication] = useState([]);
 
 
+    // function getUniqueAuthorNames(response) {
+    //     const chapters = response.data.chapters;
+
+    //     return [...new Set(
+    //         chapters.flatMap(chapter =>
+    //             chapter.contributions.map(({ contributor }) =>
+    //                 `${contributor.user.first_name} ${contributor.user.last_name}`
+    //             )
+    //         )
+    //     )];
+    // }
+
     const fetchAllBooks = async (page = 1) => {
         try {
             const response = await fetchBooks(page);
@@ -50,7 +62,7 @@ export function ApiProvider({ children }) {
             }));
             setBooks(books);
             setBooksCount(response.data.count);
-            // console.log(response.data)
+            console.log(response.data)
             // return response.results
         } catch (error) {
             console.error(error)
@@ -60,7 +72,7 @@ export function ApiProvider({ children }) {
     const fetchBookbyID = async (id) => {
         try {
             const response = await fetchBookDetail(id);
-            console.log({ response })
+            // console.log({ response })
             setBookData(
                 {
                     id: response.data.id,
@@ -79,12 +91,7 @@ export function ApiProvider({ children }) {
                                 imageUrl: p.author.image
                             }
                         }
-                    ))
-
-                        /*[
-                        { role: 'Editor', author: { id: 1, firstName: 'Elena', lastName: 'Rodriguez', designation: 'Lead Editor', imageUrl: 'https://placehold.co/150/FFC300/808080?text=E.R' } },
-                    ]
-                        */,
+                    )),
                     chapters:
                         response.data?.chapters?.map(ch => ({
                             id: ch.id,
@@ -96,30 +103,43 @@ export function ApiProvider({ children }) {
                                     lastName: c.contributor.user.last_name
                                 }
                             })) || []
-                        })) || []
-                    /*    [
-                        { id: 201, title: 'Chapter 1: The First Clue', contributors: [{ author: { id: 3, firstName: 'Aisha', lastName: 'Khan' } }] },
-                    ]*/,
+                        })) || [],
                     rating: response.data.average_rating,
                     reviews: response.data.total_reviews,
                     images:
                         response.data?.images?.map(img => (
                             { id: img.id, image: img.image }
-                        ))
-                    /*    [
-                        { id: 1, image: 'https://placehold.co/400x600/162735/BDC1C8?text=Front+Cover' },
-                        { id: 2, image: 'https://placehold.co/400x600/BDC1C8/162735?text=Back+Cover' },
-                    ]
-                        */,
-                    formats:
-
-                        response.data?.formats?.map(fmt => ({
-                            id: fmt.id, binding_type: fmt.binding_type, quality: 'Standard', language: fmt.language, mrp: fmt.mrp, stock: fmt.stock, pages: response.data.pages || 0, paper_quality: fmt.format_name || 0, length_mm: fmt.length_mm, width_mm: fmt.width_mm, weight_grams: fmt.weight_grams, sale_type: fmt.sale_type || "", sale_value: fmt.sale_value || 0, affiliate_discount_percentage: fmt.affiliate_discount_percentage || '0'
-                        }))
-                        /*[
-                        { id: 101, binding_type: 'Paperback', quality: 'Standard', language: 'English', mrp: '599.00', stock: 50, pages: 320, paper_quality: '70GSM', length_mm: 210, width_mm: 148, weight_grams: 350, sale_type: 'percentage', sale_value: '15', affiliate_discount_percentage: '10' },
-                    ]
-                        */,
+                        )),
+                    formats: response.data?.formats?.map(fmt => ({
+                        id: fmt.id, binding_type: fmt.binding_type,
+                        quality: 'Standard',
+                        language: fmt.language,
+                        mrp: fmt.mrp,
+                        stock: fmt.stock,
+                        pages: response.data.pages || 0,
+                        paper_quality: fmt.format_name || 0,
+                        length_mm: fmt.length_mm,
+                        width_mm: fmt.width_mm,
+                        weight_grams: fmt.weight_grams,
+                        sale_type: fmt.sale_type || "",
+                        sale_value: fmt.sale_value || 0,
+                        affiliate_discount_percentage: fmt.affiliate_discount_percentage || '0'
+                    })) || [{
+                        id: 0,
+                        binding_type: "Hardcover",
+                        quality: 'Standard',
+                        language: "-",
+                        mrp: 0,
+                        stock: 0,
+                        pages: response.data.pages || 0,
+                        paper_quality: 0,
+                        length_mm: "0",
+                        width_mm: "0",
+                        weight_grams: "0",
+                        sale_type: "",
+                        sale_value: 0,
+                        affiliate_discount_percentage: '0'
+                    }],
                 }
             );
             // return response
