@@ -225,17 +225,19 @@ const AdminBookFormPage = () => {
       try {
         // 1. Fetch Metadata first (authors, publications, categories)
         // This is essential because we need the list of all authors to populate our states later.
-        const [metaRes, catRes] = await Promise.all([
+        const [metaRes, author, catRes] = await Promise.all([
           API.get("/api/books-meta/"),
+          API.put("/api/books-meta/"),
           API.get("/api/categories/"),
         ]);
 
         // Prepare the master list of all authors with the 'value' and 'label' fields
         // that react-select needs. We keep the full object for our UI.
-        const allAuthorsWithOptions = metaRes.data.authors.map((author) => ({
+        // console.log({metaRes})
+        const allAuthorsWithOptions = author.data.allAuthors.map((author) => ({
           ...author,
-          value: author.id,
-          label: `${author.user.first_name} ${author.user.last_name}`,
+          value: author.author_id,
+          label: author.label,
         }));
 
         setMetaData({
@@ -263,20 +265,24 @@ const AdminBookFormPage = () => {
 
           // Find the full author objects from our master list and set them in state, respecting order.
           setSelectedAuthors(
-            authorsFromApi
-              .sort((a, b) => a.order - b.order)
-              .map((p) =>
-                allAuthorsWithOptions.find((opt) => opt.value === p.author.id)
-              )
-              .filter(Boolean) // Filter out any potential nulls
+            [...authorsFromApi] // 1. Create a copy so you don't mutate original data
+              .sort((a, b) => (a.order || 0) - (b.order || 0)) // 2. Safe sorting fallback
+              .map((p) => {
+                // 3. Match using the correct API key (p.author_id or p.author?.id depending on your API wrapper)
+                const targetId = p.author_id || p.author?.id;
+                return allAuthorsWithOptions.find((opt) => opt.value === targetId);
+              })
+              .filter(Boolean) // 4. Drops undefined/null items cleanly
           );
           setSelectedEditors(
-            editorsFromApi
-              .sort((a, b) => a.order - b.order)
-              .map((p) =>
-                allAuthorsWithOptions.find((opt) => opt.value === p.author.id)
-              )
-              .filter(Boolean)
+            [...editorsFromApi] // 1. Copy the array to prevent state mutation bugs
+              .sort((a, b) => (a.order || 0) - (b.order || 0)) // 2. Safe numeric sorting
+              .map((p) => {
+                // 3. Fallback check: look for flat ID first, then nested editor, then nested author
+                const targetId = p.editor_id || p.editor?.id || p.author_id || p.author?.id;
+                return allAuthorsWithOptions.find((opt) => opt.value === targetId);
+              })
+              .filter(Boolean) // 4. Cleanly drop any mismatches or null values
           );
 
           // --- THIS IS THE CORRECTED CHAPTER LOGIC ---
@@ -286,7 +292,7 @@ const AdminBookFormPage = () => {
             // A. Auto-detect Heading and Numbering from the first chapter
             const firstChapterTitle = sortedChapters[0].title;
             const titleParts = firstChapterTitle.split(' ');
-            
+
             if (titleParts.length > 1) {
               const detectedHeading = titleParts[0]; // e.g., "Chapter", "Unit", "अध्याय"
               const detectedNumber = titleParts[1].replace(':', ''); // e.g., "1", "I", "एक"
@@ -314,7 +320,11 @@ const AdminBookFormPage = () => {
                 title: rawTitle, // Store ONLY the clean title
                 contributors: apiChapter.contributions
                   .sort((a, b) => a.order - b.order)
-                  .map(apiContrib => allAuthorsWithOptions.find(opt => opt.value === apiContrib.contributor.id))
+                  .map((apiContrib) => {
+                    // Safe fallback chain: checks flat id first, then nested objects
+                    const targetId = apiContrib.contributor_id || apiContrib.contributor?.id || apiContrib.author_id;
+                    return allAuthorsWithOptions.find((opt) => opt.value === targetId);
+                  })
                   .filter(Boolean)
               };
             });
@@ -980,7 +990,7 @@ const AdminBookFormPage = () => {
                     <Typography variant="subtitle1" gutterBottom>
                       Chapter Formatting
                     </Typography>
-                    <Grid container spacing={2} sx={{mb: 2}}>
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
                       <Grid item size={{ xs: 12, md: 6 }}>
                         <FormControl fullWidth>
                           <InputLabel>Heading</InputLabel>
@@ -1045,24 +1055,24 @@ const AdminBookFormPage = () => {
                                       gap={1.5}
                                     >
                                       <Grid item size={{ xs: 12, md: 1 }}>
-                                      <Tooltip title="Drag to Reorder Chapter">
-                                        <IconButton
-                                          {...provided.dragHandleProps}
-                                          sx={{ cursor: "grab" }}
-                                        >
-                                          <DragIndicatorIcon />
-                                        </IconButton>
-                                      </Tooltip>
+                                        <Tooltip title="Drag to Reorder Chapter">
+                                          <IconButton
+                                            {...provided.dragHandleProps}
+                                            sx={{ cursor: "grab" }}
+                                          >
+                                            <DragIndicatorIcon />
+                                          </IconButton>
+                                        </Tooltip>
                                       </Grid>
 
                                       {/* Non-editable, auto-generated prefix */}
                                       <Grid item size={{ xs: 12, md: 2 }}>
-                                      <Typography sx={{ fontWeight: "bold" }}>
-                                        {`${headingType} ${generateNumber(
-                                          numberingStyle,
-                                          chapterIndex + 1
-                                        )}:`}
-                                      </Typography>
+                                        <Typography sx={{ fontWeight: "bold" }}>
+                                          {`${headingType} ${generateNumber(
+                                            numberingStyle,
+                                            chapterIndex + 1
+                                          )}:`}
+                                        </Typography>
                                       </Grid>
 
                                       {/* Editable field for the RAW chapter title */}
